@@ -89,6 +89,30 @@ W                         PPPP                          W
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 """
 
+ASCII_MAP_SMALL = """
+WWWWWWWWWWWWWWWWWWW
+W        PPP      W                          
+W   A             W   
+W  AAA            W 
+W AAAAA          PW 
+W  AAA           PW  
+W   A         A  PW   
+WP           AAA  W
+WP  A   A A AAAA AW
+WP           AAA  W
+WP  A   A     A   W
+WP     AA         W
+WP  A AAA         W
+WP     AA         W
+WP  A   A         W
+WWWWWWWWWWWWWWWWWWW
+"""
+
+MAP_DICT = {
+    "small": ASCII_MAP_SMALL,
+    "large": ASCII_MAP
+}
+
 # `prefab` determines which prefab game object to use for each `char` in the
 # ascii map.
 CHAR_PREFAB_MAP = {
@@ -415,7 +439,7 @@ def create_avatar_object(player_idx: int,
                   "cooldownTime": 2,
                   "beamLength": 3,
                   "beamRadius": 1,
-                  "framesTillRespawn": 4,
+                  "framesTillRespawn": 100,
                   "penaltyForBeingZapped": 0,
                   "rewardForZapping": 0,
               }
@@ -446,7 +470,7 @@ def create_avatar_objects(num_players):
   return avatar_objects
 
 
-def create_lab2d_settings(num_players: int) -> Dict[str, Any]:
+def create_lab2d_settings(num_players: int, map_size: str) -> Dict[str, Any]:
   """Returns the lab2d settings."""
   lab2d_settings = {
       "levelName": "commons_harvest",
@@ -456,7 +480,7 @@ def create_lab2d_settings(num_players: int) -> Dict[str, Any]:
       "episodeLengthFrames": 1000,
       "spriteSize": 8,
       "simulation": {
-          "map": ASCII_MAP,
+          "map": MAP_DICT[map_size],
           "gameObjects": create_avatar_objects(num_players),
           "prefabs": create_prefabs(APPLE_RESPAWN_RADIUS,
                                     REGROWTH_PROBABILITIES),
@@ -467,15 +491,15 @@ def create_lab2d_settings(num_players: int) -> Dict[str, Any]:
   return lab2d_settings
 
 
-def get_config():
+def get_config(num_players=16, map_size='large'):
   """Default configuration for training on the commons_harvest level."""
   config = config_dict.ConfigDict()
 
   # Basic configuration.
-  config.num_players = 16
+  config.num_players = num_players
 
   # Lua script configuration.
-  config.lab2d_settings = create_lab2d_settings(config.num_players)
+  config.lab2d_settings = create_lab2d_settings(config.num_players, map_size)
 
   # Action set configuration.
   config.action_set = ACTION_SET

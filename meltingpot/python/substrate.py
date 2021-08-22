@@ -43,7 +43,7 @@ class Substrate(base.Wrapper):
     return self._env.action_spec()
 
 
-def get_config(substrate_name: str) -> config_dict.ConfigDict:
+def get_config(substrate_name: str, num_players: int=16, map_size: str='large') -> config_dict.ConfigDict:
   """Returns the configs for the substrate.
 
   Args:
@@ -51,7 +51,7 @@ def get_config(substrate_name: str) -> config_dict.ConfigDict:
   """
   if substrate_name not in AVAILABLE_SUBSTRATES:
     raise ValueError(f'Unknown substrate {substrate_name!r}.')
-  return substrate_configs.get_config(substrate_name).lock()
+  return substrate_configs.get_config(substrate_name, num_players=num_players, map_size=map_size).lock()
 
 
 def build(config: config_dict.ConfigDict) -> Substrate:

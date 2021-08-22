@@ -23,6 +23,15 @@ import tree
 PLAYER_STR_FORMAT = 'player_{index}'
 
 
+def _timestep_to_global_observation(timestep: dm_env.TimeStep):
+  for index, observation in enumerate(timestep.observation):
+    if index == 0: # Just get the world observation from the first player since all world observations are the same
+      gym_world_observation = {
+          key: value for key, value in observation.items() if 'WORLD' in key
+      }
+  return gym_world_observation
+
+
 def _timestep_to_observations(timestep: dm_env.TimeStep):
   gym_observations = {}
   for index, observation in enumerate(timestep.observation):
@@ -80,7 +89,7 @@ class MeltingPotEnv(multi_agent_env.MultiAgentEnv):
     timestep = self._env.reset()
     return _timestep_to_observations(timestep)
 
-  def step(self, action):
+  def step(self, action, include_global_observation=False):
     """See base class."""
     actions = [
         action[PLAYER_STR_FORMAT.format(index=index)]
@@ -95,7 +104,12 @@ class MeltingPotEnv(multi_agent_env.MultiAgentEnv):
     info = {}
 
     observations = _timestep_to_observations(timestep)
-    return observations, rewards, done, info
+    global_observation = _timestep_to_global_observation(timestep)
+
+    if include_global_observation is True:
+      return observations, rewards, done, info, global_observation
+    else:
+      return observations, rewards, done, info
 
   def close(self):
     """See base class."""

@@ -60,11 +60,17 @@ def main():
   # Activate events printing mode with --print_events=True.
   parser.add_argument(
       '--print_events', type=bool, default=False, help='Print events')
+  parser.add_argument(
+      '--num_players', type=int, default=16, help='Number of players')
+  parser.add_argument(
+      '--map_size', type=str, default='large', help='Map size')
 
   args = parser.parse_args()
   env_config = environment_configs[args.level_name]
   level_playing_utils.run_episode(
-      args.observation, args.settings, _ACTION_MAP, env_config.get_config(),
+      args.observation, args.settings, _ACTION_MAP, env_config.get_config(
+          args.num_players, args.map_size
+      ),
       level_playing_utils.RenderType.PYGAME,
       verbose_fn=verbose_fn if args.verbose else None,
       print_events=args.print_events)

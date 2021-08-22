@@ -1,0 +1,12 @@
+absl-py
+dm_env
+immutabledict
+ml-collections
+networkx
+numpy
+pygame
+tensorflow
+
+[examples]
+gym
+ray[default,rllib]

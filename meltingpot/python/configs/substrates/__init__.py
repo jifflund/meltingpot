@@ -19,8 +19,7 @@ from typing import AbstractSet
 
 from ml_collections import config_dict
 
-
-def get_config(substrate: str) -> config_dict.ConfigDict:
+def get_config(substrate: str, num_players: int, map_size: str) -> config_dict.ConfigDict:
   """Returns the specified config.
 
   Args:
@@ -33,7 +32,7 @@ def get_config(substrate: str) -> config_dict.ConfigDict:
     raise ValueError(f'{substrate} not in {SUBSTRATES}.')
   path = f'{__name__}.{substrate}'
   module = importlib.import_module(path)
-  return module.get_config().lock()
+  return module.get_config(num_players=num_players, map_size=map_size).lock()
 
 
 SUBSTRATES: AbstractSet[str] = frozenset({

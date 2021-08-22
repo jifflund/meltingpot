@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0a8fa573-bce5-4a67-b687-03b9289879f9" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/examples/rllib/multiagent_wrapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/examples/rllib/multiagent_wrapper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/meltingpot/python/configs/substrates/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/meltingpot/python/configs/substrates/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/meltingpot/python/configs/substrates/commons_harvest_open.py" beforeDir="false" afterPath="$PROJECT_DIR$/meltingpot/python/configs/substrates/commons_harvest_open.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/meltingpot/python/human_players/play_commons_harvest.py" beforeDir="false" afterPath="$PROJECT_DIR$/meltingpot/python/human_players/play_commons_harvest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/meltingpot/python/substrate.py" beforeDir="false" afterPath="$PROJECT_DIR$/meltingpot/python/substrate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="ProjectId" id="1w8A7YRSp4cC6kzQDUKlz6hmtFG" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/examples/rllib" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/examples/rllib" />
+      <recent name="$PROJECT_DIR$/meltingpot" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0a8fa573-bce5-4a67-b687-03b9289879f9" name="Default Changelist" comment="" />
+      <created>1627829676990</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1627829676990</updated>
+      <workItem from="1627829681044" duration="42470000" />
+      <workItem from="1628602815077" duration="588000" />
+      <workItem from="1628773974102" duration="2646000" />
+      <workItem from="1629668308592" duration="415000" />
+      <workItem from="1629668901496" duration="1039000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
