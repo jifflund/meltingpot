@@ -5,12 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0a8fa573-bce5-4a67-b687-03b9289879f9" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/examples/rllib/multiagent_wrapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/examples/rllib/multiagent_wrapper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/meltingpot/python/configs/substrates/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/meltingpot/python/configs/substrates/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/rllib/replay_from_checkpoint_open_harvest.py" beforeDir="false" afterPath="$PROJECT_DIR$/examples/rllib/replay_from_checkpoint_open_harvest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/meltingpot/lua/modules/avatar_library.lua" beforeDir="false" afterPath="$PROJECT_DIR$/meltingpot/lua/modules/avatar_library.lua" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/meltingpot/python/configs/substrates/commons_harvest_open.py" beforeDir="false" afterPath="$PROJECT_DIR$/meltingpot/python/configs/substrates/commons_harvest_open.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/meltingpot/python/human_players/play_commons_harvest.py" beforeDir="false" afterPath="$PROJECT_DIR$/meltingpot/python/human_players/play_commons_harvest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/meltingpot/python/substrate.py" beforeDir="false" afterPath="$PROJECT_DIR$/meltingpot/python/substrate.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/meltingpot/python/utils/substrates/wrappers/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/meltingpot/python/utils/substrates/wrappers/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/meltingpot/python/utils/substrates/wrappers/multiplayer_wrapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/meltingpot/python/utils/substrates/wrappers/multiplayer_wrapper.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +44,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/examples/rllib" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -62,7 +64,10 @@
       <workItem from="1628602815077" duration="588000" />
       <workItem from="1628773974102" duration="2646000" />
       <workItem from="1629668308592" duration="415000" />
-      <workItem from="1629668901496" duration="1039000" />
+      <workItem from="1629668901496" duration="3065000" />
+      <workItem from="1629681284461" duration="2541000" />
+      <workItem from="1629685804772" duration="5354000" />
+      <workItem from="1630204866347" duration="17405000" />
     </task>
     <servers />
   </component>
