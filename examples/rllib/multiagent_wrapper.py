@@ -26,6 +26,9 @@ PLAYER_STR_FORMAT = 'player_{index}'
 def _timestep_to_global_observation(timestep: dm_env.TimeStep):
   for index, observation in enumerate(timestep.observation):
     if index == 0: # Just get the world observation from the first player since all world observations are the same
+      # import pdb;
+      # pdb.set_trace()
+
       gym_world_observation = {
           key: value for key, value in observation.items() if 'WORLD' in key
       }
@@ -59,6 +62,7 @@ def _spec_to_space(spec: tree.Structure[dm_env.specs.Array]) -> spaces.Space:
   Returns:
     The Gym space corresponding to the given spec.
   """
+  # import pdb; pdb.set_trace()
   if isinstance(spec, dm_env.specs.DiscreteArray):
     return spaces.Discrete(spec.num_values)
   elif isinstance(spec, dm_env.specs.BoundedArray):
@@ -96,20 +100,28 @@ class MeltingPotEnv(multi_agent_env.MultiAgentEnv):
         for index in range(self._num_players)
     ]
     timestep = self._env.step(actions)
+    # import pdb; pdb.set_trace()
+    #
     rewards = {
         PLAYER_STR_FORMAT.format(index=index): timestep.reward[index]
         for index in range(self._num_players)
     }
+    hidden_rewards = {
+      PLAYER_STR_FORMAT.format(index=index): timestep.hidden_reward[index]
+      for index in range(self._num_players)
+    }
+
     done = {'__all__': True if timestep.last() else False}
     info = {}
 
     observations = _timestep_to_observations(timestep)
+    # import pdb; pdb.set_trace()
     global_observation = _timestep_to_global_observation(timestep)
 
     if include_global_observation is True:
-      return observations, rewards, done, info, global_observation
+      return observations, rewards, hidden_rewards, done, info, global_observation
     else:
-      return observations, rewards, done, info
+      return observations, rewards, hidden_rewards, done, info
 
   def close(self):
     """See base class."""
@@ -117,9 +129,11 @@ class MeltingPotEnv(multi_agent_env.MultiAgentEnv):
 
   def single_player_observation_space(self) -> spaces.Space:
     """The observation space for a single player in this environment."""
+    # import pdb; pdb.set_trace()
     return _remove_world_observations_from_space(
         _spec_to_space(self._env.observation_spec()[0]))
 
   def single_player_action_space(self):
     """The action space for a single player in this environment."""
+    # import pdb; pdb.set_trace()
     return _spec_to_space(self._env.action_spec()[0])

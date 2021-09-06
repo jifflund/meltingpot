@@ -16,6 +16,7 @@
 from typing import Iterator, Mapping, Sequence, TypeVar
 
 import dm_env
+from dm_env import StepType
 import numpy as np
 
 from meltingpot.python.utils.substrates.wrappers import base
@@ -41,6 +42,27 @@ def _player_observations(observations: Mapping[str, T], suffix: str,
       if isinstance(value, dm_env.specs.Array):
         value = value.replace(name=suffix)
       yield player_index, value
+
+from typing import Any, NamedTuple
+class TimeStepWrapper(NamedTuple):
+    """Includes the hidden_reward..
+    TODO look at how other substrated handled this, if at all.  ALso see if way to inherit from dm_env.Timestep"""
+
+    step_type: Any
+    reward: Any
+    discount: Any
+    observation: Any
+    hidden_reward: Any
+
+    def first(self) -> bool:
+      return self.step_type == StepType.FIRST
+
+    def mid(self) -> bool:
+      return self.step_type == StepType.MID
+
+    def last(self) -> bool:
+      return self.step_type == StepType.LAST
+
 
 
 class Wrapper(base.Wrapper):
@@ -87,6 +109,7 @@ class Wrapper(base.Wrapper):
     for suffix in self._individual_observation_suffixes:
       for i, value in _player_observations(source, suffix, self._num_players):
         player_observations[i][suffix] = value
+    # print('source', source )
     for name in self._global_observation_names:
       value = source[name]
       for i in range(self._num_players):
@@ -104,17 +127,33 @@ class Wrapper(base.Wrapper):
       rewards[i] = value
     return rewards
 
-  def _get_timestep(self, source: dm_env.TimeStep) -> dm_env.TimeStep:
+
+  def _get_hidden_rewards(self, source: Mapping[str, T]) -> Sequence[T]:
+    """Returns multiplayer hidden rewards from dmlab2d observations.
+
+    Args:
+      source: dmlab2d observations source to check.
+    """
+    rewards = [None] * self._num_players
+    for i, value in _player_observations(source, "HIDDEN_REWARD", self._num_players):
+      rewards[i] = value
+    # print('hidden_rewards', rewards)
+    return rewards
+
+  def _get_timestep(self, source: TimeStepWrapper) -> TimeStepWrapper:
     """Returns multiplayer timestep from dmlab2d observations.
 
     Args:
       source: dmlab2d observations source to check.
     """
-    return dm_env.TimeStep(
+    # print('self._get_rewards(source.observation)', self._get_rewards(source.observation))
+    return TimeStepWrapper(
         step_type=source.step_type,
         reward=self._get_rewards(source.observation),
         discount=0. if source.discount is None else source.discount,
-        observation=self._get_observations(source.observation))
+        observation=self._get_observations(source.observation),
+        hidden_reward=self._get_hidden_rewards(source.observation))
+
 
   def _get_action(self, source: Sequence[Mapping[str, T]]) -> Mapping[str, T]:
     """Returns dmlab2 action from multiplayer actions.
@@ -152,6 +191,7 @@ class Wrapper(base.Wrapper):
 
   def observation_spec(self) -> Sequence[Mapping[str, dm_env.specs.Array]]:
     """See base class."""
+    # print('multiplayer_wrapper', super().observation_spec())
     source = super().observation_spec()
     return self._get_observations(source)
 
@@ -159,3 +199,8 @@ class Wrapper(base.Wrapper):
     """See base class."""
     source = super().observation_spec()
     return self._get_rewards(source)
+
+  def hidden_reward_spec(self) -> Sequence[dm_env.specs.Array]:
+    """See base class."""
+    source = super().observation_spec()
+    return self._get_hidden_rewards(source)

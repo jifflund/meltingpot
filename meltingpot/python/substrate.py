@@ -34,6 +34,11 @@ class Substrate(base.Wrapper):
     """See base class."""
     return self._env.reward_spec()
 
+  #TODO
+  def hidden_reward_spec(self) -> Sequence[dm_env.specs.Array]:
+    """See base class."""
+    return self._env.hidden_reward_spec()
+
   def observation_spec(self) -> Sequence[Mapping[str, dm_env.specs.Array]]:
     """See base class."""
     return self._env.observation_spec()

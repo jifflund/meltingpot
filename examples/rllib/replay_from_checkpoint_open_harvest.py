@@ -79,6 +79,7 @@ def main():
   # 7. Extract space dimensions
   test_env = env_creator(config["env_config"])
   obs_space = test_env.single_player_observation_space()
+  # print('obs_space', obs_space)
   act_space = test_env.single_player_action_space()
 
   # 8. Configuration for multiagent setup with policy sharing:
@@ -137,10 +138,16 @@ def main():
   max_step = 100
 
   for i in range(args.num_replays):
-    print(f'Feplay number {i} of {args.num_replays}')
+    print(f'Replay number {i} of {args.num_replays}')
     episode_reward = 0
+    episode_hidden_reward = 0
     step_count = 0
+    # import pdb;
+    # pdb.set_trace()
+
     obs = test_env.reset()
+    # import pdb;
+    # pdb.set_trace()
 
     while step_count <= max_step:
       # if done['agent_0'] is not False:
@@ -149,11 +156,16 @@ def main():
 
       actions = {}
       for player in obs.keys():
-
+        # print(player)
+        
+        # import pdb; pdb.set_trace()
         action = agent.compute_action(obs[player], policy_id="av", explore=False)
         actions[player] = action
 
-      obs, reward, done, info, global_observation = test_env.step(actions, include_global_observation=True)  # , 1: action2})
+
+      obs, reward, hidden_reward, done, info, global_observation = test_env.step(actions, include_global_observation=True)  # , 1: action2})
+
+      # import pdb;   pdb.set_trace()
 
       if args.render_env == 'True':
         global_observation = global_observation['WORLD.RGB']
@@ -167,7 +179,9 @@ def main():
 
       step_count += 1
       episode_reward += sum(reward.values())
+      episode_hidden_reward += sum(hidden_reward.values())
     print('total episode_reward', episode_reward)
+    print('total episode_hidden_reward', episode_hidden_reward)
 
 
 

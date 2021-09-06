@@ -442,6 +442,7 @@ def create_avatar_object(player_idx: int,
                   "framesTillRespawn": 100,
                   "penaltyForBeingZapped": 0,
                   "rewardForZapping": 0,
+                  "hiddenRewardForZapping": 10
               }
           },
           {
@@ -508,7 +509,7 @@ def get_config(num_players=16, map_size='large'):
       "RGB",
       "READY_TO_SHOOT",
       "POSITION",
-      "ORIENTATION",
+      "ORIENTATION"
   ]
   config.global_observation_names = [
       "WORLD.RGB",
