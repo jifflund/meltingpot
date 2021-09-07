@@ -8,11 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/examples/rllib/multiagent_wrapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/examples/rllib/multiagent_wrapper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/examples/rllib/replay_from_checkpoint_open_harvest.py" beforeDir="false" afterPath="$PROJECT_DIR$/examples/rllib/replay_from_checkpoint_open_harvest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/meltingpot/lua/modules/avatar_library.lua" beforeDir="false" afterPath="$PROJECT_DIR$/meltingpot/lua/modules/avatar_library.lua" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/meltingpot/python/configs/substrates/commons_harvest_open.py" beforeDir="false" afterPath="$PROJECT_DIR$/meltingpot/python/configs/substrates/commons_harvest_open.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/meltingpot/python/substrate.py" beforeDir="false" afterPath="$PROJECT_DIR$/meltingpot/python/substrate.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/meltingpot/python/utils/substrates/wrappers/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/meltingpot/python/utils/substrates/wrappers/base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/meltingpot/python/utils/substrates/wrappers/multiplayer_wrapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/meltingpot/python/utils/substrates/wrappers/multiplayer_wrapper.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +63,7 @@
       <workItem from="1629668901496" duration="3065000" />
       <workItem from="1629681284461" duration="2541000" />
       <workItem from="1629685804772" duration="5354000" />
-      <workItem from="1630204866347" duration="17405000" />
+      <workItem from="1630204866347" duration="19079000" />
     </task>
     <servers />
   </component>

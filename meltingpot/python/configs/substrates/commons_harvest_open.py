@@ -95,16 +95,9 @@ W        PPP      W
 W   A             W   
 W  AAA            W 
 W AAAAA          PW 
-W  AAA           PW  
-W   A         A  PW   
-WP           AAA  W
-WP  A   A A AAAA AW
-WP           AAA  W
-WP  A   A     A   W
-WP     AA         W
-WP  A AAA         W
-WP     AA         W
-WP  A   A         W
+W  AAA     PP    PW  
+W   A            PW   
+WP                W
 WWWWWWWWWWWWWWWWWWW
 """
 
@@ -442,7 +435,7 @@ def create_avatar_object(player_idx: int,
                   "framesTillRespawn": 100,
                   "penaltyForBeingZapped": 0,
                   "rewardForZapping": 0,
-                  "hiddenRewardForZapping": 10
+                  "hiddenRewardForZapping": -10
               }
           },
           {

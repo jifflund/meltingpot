@@ -163,7 +163,9 @@ def main():
         actions[player] = action
 
 
-      obs, reward, hidden_reward, done, info, global_observation = test_env.step(actions, include_global_observation=True)  # , 1: action2})
+      obs, reward, done, info, global_observation, hidden_reward = test_env.step(
+        actions, include_global_observation=True, include_hidden_rewards=True
+      )
 
       # import pdb;   pdb.set_trace()
 
@@ -175,7 +177,7 @@ def main():
         surf = pygame.transform.scale(surface, (rect[2] * scale, rect[3] * scale))
         game_display.blit(surf, dest=(0, 0))
         pygame.display.update()
-        time.sleep(.1)
+        # time.sleep(.1)
 
       step_count += 1
       episode_reward += sum(reward.values())

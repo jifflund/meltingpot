@@ -93,7 +93,7 @@ class MeltingPotEnv(multi_agent_env.MultiAgentEnv):
     timestep = self._env.reset()
     return _timestep_to_observations(timestep)
 
-  def step(self, action, include_global_observation=False):
+  def step(self, action, include_global_observation=False, include_hidden_rewards=False):
     """See base class."""
     actions = [
         action[PLAYER_STR_FORMAT.format(index=index)]
@@ -118,10 +118,12 @@ class MeltingPotEnv(multi_agent_env.MultiAgentEnv):
     # import pdb; pdb.set_trace()
     global_observation = _timestep_to_global_observation(timestep)
 
+    result = [observations, rewards, done, info]
     if include_global_observation is True:
-      return observations, rewards, hidden_rewards, done, info, global_observation
-    else:
-      return observations, rewards, hidden_rewards, done, info
+      result.append(global_observation)
+    if include_hidden_rewards is True:
+      result.append(hidden_rewards)
+    return result
 
   def close(self):
     """See base class."""
