@@ -93,7 +93,9 @@ class MeltingPotEnv(multi_agent_env.MultiAgentEnv):
     timestep = self._env.reset()
     return _timestep_to_observations(timestep)
 
-  def step(self, action, include_global_observation=False, include_hidden_rewards=False):
+  def step(self, action, include_global_observation=False, include_hidden_rewards=False,
+           add_hidden_reward=True
+           ):
     """See base class."""
     actions = [
         action[PLAYER_STR_FORMAT.format(index=index)]
@@ -102,14 +104,23 @@ class MeltingPotEnv(multi_agent_env.MultiAgentEnv):
     timestep = self._env.step(actions)
     # import pdb; pdb.set_trace()
     #
-    rewards = {
-        PLAYER_STR_FORMAT.format(index=index): timestep.reward[index]
-        for index in range(self._num_players)
-    }
+
+
     hidden_rewards = {
       PLAYER_STR_FORMAT.format(index=index): timestep.hidden_reward[index]
       for index in range(self._num_players)
     }
+
+    if add_hidden_reward is True:
+      rewards = {
+        PLAYER_STR_FORMAT.format(index=index): timestep.reward[index] + timestep.hidden_reward[index]
+        for index in range(self._num_players)
+      }
+    else:
+      rewards = {
+          PLAYER_STR_FORMAT.format(index=index): timestep.reward[index]
+          for index in range(self._num_players)
+      }
 
     done = {'__all__': True if timestep.last() else False}
     info = {}

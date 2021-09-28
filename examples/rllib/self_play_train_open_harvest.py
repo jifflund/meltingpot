@@ -84,11 +84,11 @@ def main():
   config["log_level"] = "DEBUG"
   config["num_workers"] = 1
   # Fragment length, collected at once from each worker and for each agent!
-  config["rollout_fragment_length"] = 30
+  config["rollout_fragment_length"] = 10
   # Training batch size -> Fragments are concatenated up to this point.
   config["train_batch_size"] = 200
   # After n steps, force reset simulation
-  config["horizon"] = 200
+  config["horizon"] = 50
   # Default: False
   config["no_done_at_end"] = False
   # Info: If False, each agents trajectory is expected to have

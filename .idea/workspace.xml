@@ -8,7 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/examples/rllib/multiagent_wrapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/examples/rllib/multiagent_wrapper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/examples/rllib/replay_from_checkpoint_open_harvest.py" beforeDir="false" afterPath="$PROJECT_DIR$/examples/rllib/replay_from_checkpoint_open_harvest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/meltingpot/python/configs/substrates/commons_harvest_open.py" beforeDir="false" afterPath="$PROJECT_DIR$/meltingpot/python/configs/substrates/commons_harvest_open.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/rllib/self_play_train_open_harvest.py" beforeDir="false" afterPath="$PROJECT_DIR$/examples/rllib/self_play_train_open_harvest.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +40,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/examples/rllib" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -63,7 +63,8 @@
       <workItem from="1629668901496" duration="3065000" />
       <workItem from="1629681284461" duration="2541000" />
       <workItem from="1629685804772" duration="5354000" />
-      <workItem from="1630204866347" duration="19079000" />
+      <workItem from="1630204866347" duration="20234000" />
+      <workItem from="1631193094740" duration="14077000" />
     </task>
     <servers />
   </component>

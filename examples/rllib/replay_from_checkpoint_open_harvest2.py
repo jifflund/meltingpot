@@ -83,13 +83,28 @@ def main():
   act_space = test_env.single_player_action_space()
 
   # 8. Configuration for multiagent setup with policy sharing:
+  policies = [f'player_{i}' for i in range(int(args.num_players))]
+  def policy_mapper(agent_id):
+    # print('agent_id: {}'.format(agent_id))
+    return agent_id
+
+
+  policy_graphs = {}
+  for policy in policies:
+    policy_graphs[policy] = (None, obs_space, act_space, {})
+
   config["multiagent"] = {
-      "policies": {
-          # the first tuple value is None -> uses default policy
-          "av": (None, obs_space, act_space, {}),
-      },
-      "policy_mapping_fn": lambda agent_id, **kwargs: "av"
+    "policies": policy_graphs,
+    "policy_mapping_fn": policy_mapper,
   }
+  #
+  # config["multiagent"] = {
+  #     "policies": {
+  #         # the first tuple value is None -> uses default policy
+  #         "av": (None, obs_space, act_space, {}),
+  #     },
+  #     "policy_mapping_fn": lambda agent_id, **kwargs: "av"
+  # }
 
   config['framework'] = 'torch'
 
@@ -138,7 +153,7 @@ def main():
   max_step = 50
 
   for i in range(args.num_replays):
-    print(f'Replay number {i} of {args.num_replays}')
+    # print(f'Replay number {i} of {args.num_replays}')
     episode_reward = 0
     episode_hidden_reward = 0
     step_count = 0
@@ -158,8 +173,8 @@ def main():
       for player in obs.keys():
         # print(player)
         
-        action = agent.compute_action(obs[player], policy_id="av", explore=False)
-        import pdb; pdb.set_trace()
+        action = agent.compute_action(obs[player], policy_id=player, explore=True)
+        # import pdb; pdb.set_trace()
         actions[player] = action
 
 
