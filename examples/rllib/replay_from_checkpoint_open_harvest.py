@@ -159,7 +159,7 @@ def main():
         # print(player)
         
         # import pdb; pdb.set_trace()
-        action = agent.compute_action(obs[player], policy_id="av", explore=False)
+        action = agent.compute_action(obs[player], policy_id="av", explore=True) # This is required otherise trainged agents may get stuck
         actions[player] = action
 
 
@@ -182,6 +182,9 @@ def main():
       step_count += 1
       episode_reward += sum(reward.values())
       episode_hidden_reward += sum(hidden_reward.values())
+      print('episode_reward', episode_reward)
+      print('episode_hidden_reward', episode_hidden_reward)
+
     print('total episode_reward', episode_reward)
     print('total episode_hidden_reward', episode_hidden_reward)
 
