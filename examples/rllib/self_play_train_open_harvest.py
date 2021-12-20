@@ -29,24 +29,30 @@ import multiagent_wrapper  # pylint: disable=g-bad-import-order
 def main():
   parser = argparse.ArgumentParser(description=__doc__)
   parser.add_argument(
-    '--num_players', type=int, default=16, help='Number of players')
+    '--agent_algorithm', type=str, required=True, choices=["PPO", "A2C", "DQN"], help='Choose a RL agent algorithm supported in Ray')
   parser.add_argument(
-    '--map_size', type=str, default='large', help='Map size')
+    '--include_hidden_rewards', type=str, required=True, choices=["True", "False"],
+    help='Whether to include hidden rewards in the training')
+  parser.add_argument(
+    '--num_players', type=int, default=3, help='Number of players')
+  parser.add_argument(
+    '--map_size', type=str, default='small', help='Map size')
   parser.add_argument(
     '--checkpoint_path', type=str, default=None, help='Optional checkpoint to start training from')
 
   args = parser.parse_args()
 
+  include_hidden_rewards = True if args.include_hidden_rewards == "True" else False
 
   # function that outputs the environment you wish to register.
   def env_creator(env_config):
     env = substrate.build(config_dict.ConfigDict(env_config))
-    env = multiagent_wrapper.MeltingPotEnv(env)
+    env = multiagent_wrapper.MeltingPotEnv(env, include_hidden_rewards=include_hidden_rewards)
     return env
 
   # We need the following pieces to run the training:
   # 1. The agent algorithm to use.
-  agent_algorithm = "PPO"
+  agent_algorithm = args.agent_algorithm
   # 2. The name of the MeltingPot substrate, coming
   # from substrate.AVAILABLE_SUBSTRATES.
   # substrate_name = "allelopathic_harvest"
@@ -82,7 +88,7 @@ def main():
   # Use GPUs iff `RLLIB_NUM_GPUS` env var set to > 0.
   config["num_gpus"] = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
   config["log_level"] = "DEBUG"
-  config["num_workers"] = 1
+  config["num_workers"] = 5
   # Fragment length, collected at once from each worker and for each agent!
   config["rollout_fragment_length"] = 30
   # Training batch size -> Fragments are concatenated up to this point.
@@ -114,9 +120,9 @@ def main():
   # checkpoint_path = '/Users/allisterlundberg/ray_results/trainer_meltingpot_v1/PPO_meltingpot_374d8_00000_0_2021-08-02_13-07-08/checkpoint_000020/checkpoint-20'
 
   analysis = tune.run(
-    "PPO",
-    name='trainer_meltingpot_v1',
-    stop=stopper,
+    args.agent_algorithm,
+    name=f'meltingpot_open_harvest_{args.agent_algorithm.lower()}_hidden_reward_{args.include_hidden_rewards}',
+    stop={"training_iteration": 100},     # stop=stopper,
     verbose=3,
     checkpoint_at_end=True,
     keep_checkpoints_num=100,

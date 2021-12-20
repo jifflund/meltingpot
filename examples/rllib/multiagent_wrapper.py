@@ -84,16 +84,18 @@ def _spec_to_space(spec: tree.Structure[dm_env.specs.Array]) -> spaces.Space:
 class MeltingPotEnv(multi_agent_env.MultiAgentEnv):
   """An adapter between the Melting Pot substrates and RLLib MultiAgentEnv."""
 
-  def __init__(self, env: dmlab2d.Environment):
+  def __init__(self, env: dmlab2d.Environment, include_hidden_rewards):
     self._env = env
     self._num_players = len(self._env.observation_spec())
     self.step_count = 0
     self.cumulative_rewards = {}
+    self.include_hidden_rewards = include_hidden_rewards
 
   def reset(self):
     """See base class."""
     timestep = self._env.reset()
     self.step_count = 0
+    self.cumulative_rewards = {}
     return _timestep_to_observations(timestep)
 
 
@@ -108,7 +110,7 @@ class MeltingPotEnv(multi_agent_env.MultiAgentEnv):
     mean_absolute_difference = np.abs(np.subtract.outer(timestep_reward, timestep_reward)).mean()
     return -mean_absolute_difference
 
-  def step(self, action, include_global_observation=False, include_hidden_rewards=False):
+  def step(self, action):
     """See base class."""
     self.step_count += 1
 
@@ -124,6 +126,11 @@ class MeltingPotEnv(multi_agent_env.MultiAgentEnv):
         PLAYER_STR_FORMAT.format(index=index): timestep.reward[index]
         for index in range(self._num_players)
     }
+
+
+    for key, value in rewards.items():
+      self.cumulative_rewards[key] = self.cumulative_rewards.get(key, 0) + int(value)
+
     # for k, v in rewards.items():
     #   rewardv = int(v)
     #   if rewardv >0:
@@ -135,9 +142,8 @@ class MeltingPotEnv(multi_agent_env.MultiAgentEnv):
     # if self.cumulative_rewards is None:
     #   self.cumulative_rewards = rewards
     # else:
-    for key, value in rewards.items():
-      self.cumulative_rewards[key] = self.cumulative_rewards.get(key, 0) + int(value)
 
+    # if self.include_hidden_rewards is True:
     hidden_rewards = {
       PLAYER_STR_FORMAT.format(index=index): timestep.hidden_reward[index]
       for index in range(self._num_players)
@@ -158,23 +164,42 @@ class MeltingPotEnv(multi_agent_env.MultiAgentEnv):
           self.cumulative_rewards[key] - overconsumption_threshold, 0)
 
       # print('overconsumption_penalty', overconsumption_penalty)
-
-      for key, value in hidden_rewards.items():
-        hidden_rewards[key] = (value \
-                               + np.array(inequality_penalty) \
-                               + np.array(overconsumption_penalty[key])).reshape(1)
-      # print('hidden_rewards', hidden_rewards)
       # print('self.cumulative_rewards', self.cumulative_rewards)
 
+      if self.include_hidden_rewards is True:
+        for key, value in hidden_rewards.items():
+          hidden_rewards[key] = (value \
+                                 + np.array(inequality_penalty) \
+                                 + np.array(overconsumption_penalty[key])).reshape(1)
+
+        for key, value in hidden_rewards.items():
+          rewards[key] = (float(rewards[key]) + float(hidden_rewards[key]))
+
+      # print('hidden_rewards', hidden_rewards)
+      # print('self.cumulative_rewards', self.cumulative_rewards)
+      # print('rewards', rewards)
+
+    else:
+      if self.include_hidden_rewards is True:
+        for key, value in hidden_rewards.items():
+          rewards[key] = (float(rewards[key]) + float(hidden_rewards[key]))
+
+
     observations = _timestep_to_observations(timestep)
-    # import pdb; pdb.set_trace()
     global_observation = _timestep_to_global_observation(timestep)
 
+    # import pdb; pdb.set_trace()
+
+    # print('rewards1111!', rewards)
+    # print('hidden_rewards2222!', hidden_rewards)
+
+
+    # print('rewards!!!', rewards)
+
     result = [observations, rewards, done, info]
-    if include_global_observation is True:
-      result.append(global_observation)
-    if include_hidden_rewards is True:
-      result.append(hidden_rewards)
+
+    # result.append(global_observation)
+    # result.append(hidden_rewards)
     return result
 
   def close(self):
