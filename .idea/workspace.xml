@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="0a8fa573-bce5-4a67-b687-03b9289879f9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/rllib/multiagent_wrapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/examples/rllib/multiagent_wrapper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/examples/rllib/self_play_train_open_harvest.py" beforeDir="false" afterPath="$PROJECT_DIR$/examples/rllib/self_play_train_open_harvest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/meltingpot/python/configs/substrates/commons_harvest_open.py" beforeDir="false" afterPath="$PROJECT_DIR$/meltingpot/python/configs/substrates/commons_harvest_open.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +65,7 @@
       <workItem from="1630204866347" duration="19079000" />
       <workItem from="1639945055113" duration="20420000" />
       <workItem from="1639977908509" duration="7425000" />
-      <workItem from="1639988386001" duration="5828000" />
+      <workItem from="1639988386001" duration="9375000" />
     </task>
     <servers />
   </component>

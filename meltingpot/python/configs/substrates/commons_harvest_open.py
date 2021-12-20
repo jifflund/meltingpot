@@ -101,9 +101,23 @@ WP                W
 WWWWWWWWWWWWWWWWWWW
 """
 
+
+
+ASCII_MAP_SMALL_CLOSED = """
+WWWWWWWWWWWWWWWWWWW
+WP                W                          
+WP  A   W   PPP   W   
+WP AAA  W         W 
+W AAAAA W   PPP   W 
+W  AAA  W         W  
+W   A   WWWWW     W   
+W                 W
+WWWWWWWWWWWWWWWWWWW
+"""
 MAP_DICT = {
     "small": ASCII_MAP_SMALL,
-    "large": ASCII_MAP
+    "large": ASCII_MAP,
+    "small_closed": ASCII_MAP_SMALL_CLOSED
 }
 
 # `prefab` determines which prefab game object to use for each `char` in the

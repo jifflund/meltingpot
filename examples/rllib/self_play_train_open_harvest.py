@@ -29,6 +29,8 @@ import multiagent_wrapper  # pylint: disable=g-bad-import-order
 def main():
   parser = argparse.ArgumentParser(description=__doc__)
   parser.add_argument(
+    '--num_training_iteration', type=int, default=100, help='Number of training iterations.')
+  parser.add_argument(
     '--agent_algorithm', type=str, required=True, choices=["PPO", "A2C", "DQN"], help='Choose a RL agent algorithm supported in Ray')
   parser.add_argument(
     '--include_hidden_rewards', type=str, required=True, choices=["True", "False"],
@@ -36,9 +38,10 @@ def main():
   parser.add_argument(
     '--num_players', type=int, default=3, help='Number of players')
   parser.add_argument(
-    '--map_size', type=str, default='small', help='Map size')
+    '--map_size', type=str, default='small', choices=["small", "small_closed"], help='Map type')
   parser.add_argument(
-    '--checkpoint_path', type=str, default=None, help='Optional checkpoint to start training from')
+    '--checkpoint_path', type=str, default=None,
+    help='Optional checkpoint to start training from. This can be used to check pretrained models.')
 
   args = parser.parse_args()
 
@@ -57,6 +60,7 @@ def main():
   # from substrate.AVAILABLE_SUBSTRATES.
   # substrate_name = "allelopathic_harvest"
   substrate_name = "commons_harvest_open"
+
   # 3. The number of CPUs to be used to run the training.
   num_cpus = 6
 
@@ -117,12 +121,11 @@ def main():
 
 
   checkpoint_path = args.checkpoint_path
-  # checkpoint_path = '/Users/allisterlundberg/ray_results/trainer_meltingpot_v1/PPO_meltingpot_374d8_00000_0_2021-08-02_13-07-08/checkpoint_000020/checkpoint-20'
 
   analysis = tune.run(
     args.agent_algorithm,
-    name=f'meltingpot_open_harvest_{args.agent_algorithm.lower()}_hidden_reward_{args.include_hidden_rewards}',
-    stop={"training_iteration": 100},     # stop=stopper,
+    name=f'meltingpot_open_harvest_{args.agent_algorithm.lower()}_hidden_reward_{args.include_hidden_rewards}_type_{args.map_size}',
+    stop={"training_iteration": args.num_training_iteration},     # stop=stopper,
     verbose=3,
     checkpoint_at_end=True,
     keep_checkpoints_num=100,
