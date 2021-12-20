@@ -229,6 +229,15 @@ function Avatar:addObservations(tileSet, world, observations)
       end
   }
 
+  observations[#observations + 1] = {
+      name = stringId .. '.HIDDEN_REWARD',
+      type = 'Doubles',
+      shape = {},
+      func = function(grid)
+        return self._playerVolatileVariables.hiddenReward
+      end
+  }
+
   local playerLayerView = world:createView(playerViewConfig)
   local playerLayerViewSpec =
       playerLayerView:observationSpec(stringId .. '.LAYER')
@@ -245,6 +254,7 @@ function Avatar:addObservations(tileSet, world, observations)
       shape = playerLayerView:gridSize(),
       set = tileSet
   }
+-- [[TODO  maybe add in additional reward here- but don't see it in the UI that I'm using.  how to add to return as part of obs]]
 
   local spec = {
       name = stringId .. '.RGB',
@@ -259,6 +269,19 @@ function Avatar:addObservations(tileSet, world, observations)
       end
   }
   observations[#observations + 1] = spec
+--   local spec = {
+--       name = stringId .. '.RGB123',
+--       type = 'tensor.ByteTensor',
+--       shape = playerView:shape(),
+--       func = function(grid)
+--         local layer_observation = playerLayerView:observation{
+--             grid = grid,
+--             piece = self.gameObject:getPiece(),
+--         }
+--         return playerView:render(layer_observation)
+--       end
+--   }
+--   observations[#observations + 1] = spec
 end
 
 function Avatar:reset()
@@ -267,6 +290,7 @@ end
 
 function Avatar:_startFrame()
   self._playerVolatileVariables.reward = 0
+  self._playerVolatileVariables.hiddenReward = 0
 end
 
 --[[ `locator` must be a valid piece id.]]
@@ -279,6 +303,7 @@ function Avatar:start(locator)
   end
   self._playerVolatileVariables = {
       reward = 0,
+      hiddenReward = 0,
       actions = actions
   }
   local targetTransform = self.gameObject._grid:transform(locator)
@@ -350,8 +375,28 @@ function Avatar:addReward(amount)
   end
 end
 
+function Avatar:addHiddenReward(amount)
+  local function _addHiddenReward(amount)
+    self._playerVolatileVariables.hiddenReward = (
+          self._playerVolatileVariables.hiddenReward + amount)
+  end
+  if self._config.skipWaitStateRewards then
+    -- Only add rewards if avatar is not in a wait state.
+    if self.gameObject:getState() ~= self._config.waitState then
+      _addHiddenReward(amount)
+    end
+  else
+    -- Add rewards regardless of whether avatar is in wait state.
+    _addHiddenReward(amount)
+  end
+end
+
 function Avatar:getReward()
   return self._playerVolatileVariables.reward
+end
+
+function Avatar:getHiddenReward()
+  return self._playerVolatileVariables.hiddenReward
 end
 
 -- Return a table with avatar's actions and rewards on the current frame.
@@ -544,6 +589,7 @@ function Zapper:__init__(kwargs)
       {'framesTillRespawn', args.numberType},
       {'penaltyForBeingZapped', args.numberType},
       {'rewardForZapping', args.numberType},
+      {'hiddenRewardForZapping', args.numberType},
       {'removeHitPlayer', args.default(true), args.booleanType},
   })
   Zapper.Base.__init__(self, kwargs)
@@ -554,6 +600,7 @@ function Zapper:__init__(kwargs)
   self._config.framesTillRespawn = kwargs.framesTillRespawn
   self._config.penaltyForBeingZapped = kwargs.penaltyForBeingZapped
   self._config.rewardForZapping = kwargs.rewardForZapping
+  self._config.hiddenRewardForZapping = kwargs.hiddenRewardForZapping
   self._config.removeHitPlayer = kwargs.removeHitPlayer
 end
 
@@ -627,6 +674,7 @@ function Zapper:onHit(hittingGameObject, hitName)
                'target', zappedAvatar:getIndex())  -- int
     zappedAvatar:addReward(self._config.penaltyForBeingZapped)
     zapperAvatar:addReward(self._config.rewardForZapping)
+    zapperAvatar:addHiddenReward(self._config.hiddenRewardForZapping)
     if self._config.removeHitPlayer then
       self.gameObject:setState(self:getWaitState())
     end

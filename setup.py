@@ -40,7 +40,7 @@ setuptools.setup(
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
     ],
 
-    packages=['meltingpot'],
+    packages=['meltingpot', 'examples'],
     package_data={
         'meltingpot': [
             'assets/saved_models/**/**/saved_model.pb',

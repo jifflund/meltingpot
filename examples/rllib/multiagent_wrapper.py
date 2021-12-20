@@ -23,6 +23,18 @@ import tree
 PLAYER_STR_FORMAT = 'player_{index}'
 
 
+def _timestep_to_global_observation(timestep: dm_env.TimeStep):
+  for index, observation in enumerate(timestep.observation):
+    if index == 0: # Just get the world observation from the first player since all world observations are the same
+      # import pdb;
+      # pdb.set_trace()
+
+      gym_world_observation = {
+          key: value for key, value in observation.items() if 'WORLD' in key
+      }
+  return gym_world_observation
+
+
 def _timestep_to_observations(timestep: dm_env.TimeStep):
   gym_observations = {}
   for index, observation in enumerate(timestep.observation):
@@ -50,6 +62,7 @@ def _spec_to_space(spec: tree.Structure[dm_env.specs.Array]) -> spaces.Space:
   Returns:
     The Gym space corresponding to the given spec.
   """
+  # import pdb; pdb.set_trace()
   if isinstance(spec, dm_env.specs.DiscreteArray):
     return spaces.Discrete(spec.num_values)
   elif isinstance(spec, dm_env.specs.BoundedArray):
@@ -71,31 +84,123 @@ def _spec_to_space(spec: tree.Structure[dm_env.specs.Array]) -> spaces.Space:
 class MeltingPotEnv(multi_agent_env.MultiAgentEnv):
   """An adapter between the Melting Pot substrates and RLLib MultiAgentEnv."""
 
-  def __init__(self, env: dmlab2d.Environment):
+  def __init__(self, env: dmlab2d.Environment, include_hidden_rewards):
     self._env = env
     self._num_players = len(self._env.observation_spec())
+    self.step_count = 0
+    self.cumulative_rewards = {}
+    self.include_hidden_rewards = include_hidden_rewards
 
   def reset(self):
     """See base class."""
     timestep = self._env.reset()
+    self.step_count = 0
+    self.cumulative_rewards = {}
     return _timestep_to_observations(timestep)
+
+
+  def calculate_inequality_penalty(self):
+    """Computes the positive reward inequalty penalty for a given timestep reward.
+       This is a proxy for (un)empowerment
+    """
+    # import pdb; pdb.set_trace()
+    timestep_reward = np.array(list(self.cumulative_rewards.values()))
+    # print('timestep_reward', timestep_reward)
+    timestep_reward[timestep_reward <= 0] = 0
+    mean_absolute_difference = np.abs(np.subtract.outer(timestep_reward, timestep_reward)).mean()
+    return -mean_absolute_difference
 
   def step(self, action):
     """See base class."""
+    self.step_count += 1
+
+    # print('step_count',self.step_count)
     actions = [
         action[PLAYER_STR_FORMAT.format(index=index)]
         for index in range(self._num_players)
     ]
     timestep = self._env.step(actions)
+    # import pdb; pdb.set_trace()
+    #
     rewards = {
         PLAYER_STR_FORMAT.format(index=index): timestep.reward[index]
         for index in range(self._num_players)
     }
+
+
+    for key, value in rewards.items():
+      self.cumulative_rewards[key] = self.cumulative_rewards.get(key, 0) + int(value)
+
+    # for k, v in rewards.items():
+    #   rewardv = int(v)
+    #   if rewardv >0:
+    #     import pdb;
+    #     pdb.set_trace()
+    #     print(int(v))
+
+    # print('rewards', rewards)
+    # if self.cumulative_rewards is None:
+    #   self.cumulative_rewards = rewards
+    # else:
+
+    # if self.include_hidden_rewards is True:
+    hidden_rewards = {
+      PLAYER_STR_FORMAT.format(index=index): timestep.hidden_reward[index]
+      for index in range(self._num_players)
+    }
+
+
     done = {'__all__': True if timestep.last() else False}
     info = {}
 
+    if timestep.last() or self.step_count == 200:
+      inequality_penalty = self.calculate_inequality_penalty()
+      # print('inequality_penalty!!!!', inequality_penalty)
+
+      overconsumption_threshold = 4
+      overconsumption_penalty = {}
+      for key, value in self.cumulative_rewards.items():
+        overconsumption_penalty[key] = -1.0 * max(
+          self.cumulative_rewards[key] - overconsumption_threshold, 0)
+
+      # print('overconsumption_penalty', overconsumption_penalty)
+      # print('self.cumulative_rewards', self.cumulative_rewards)
+
+      if self.include_hidden_rewards is True:
+        for key, value in hidden_rewards.items():
+          hidden_rewards[key] = (value \
+                                 + np.array(inequality_penalty) \
+                                 + np.array(overconsumption_penalty[key])).reshape(1)
+
+        for key, value in hidden_rewards.items():
+          rewards[key] = (float(rewards[key]) + float(hidden_rewards[key]))
+
+      # print('hidden_rewards', hidden_rewards)
+      # print('self.cumulative_rewards', self.cumulative_rewards)
+      # print('rewards', rewards)
+
+    else:
+      if self.include_hidden_rewards is True:
+        for key, value in hidden_rewards.items():
+          rewards[key] = (float(rewards[key]) + float(hidden_rewards[key]))
+
+
     observations = _timestep_to_observations(timestep)
-    return observations, rewards, done, info
+    global_observation = _timestep_to_global_observation(timestep)
+
+    # import pdb; pdb.set_trace()
+
+    # print('rewards1111!', rewards)
+    # print('hidden_rewards2222!', hidden_rewards)
+
+
+    # print('rewards!!!', rewards)
+
+    result = [observations, rewards, done, info]
+
+    # result.append(global_observation)
+    # result.append(hidden_rewards)
+    return result
 
   def close(self):
     """See base class."""
@@ -103,9 +208,11 @@ class MeltingPotEnv(multi_agent_env.MultiAgentEnv):
 
   def single_player_observation_space(self) -> spaces.Space:
     """The observation space for a single player in this environment."""
+    # import pdb; pdb.set_trace()
     return _remove_world_observations_from_space(
         _spec_to_space(self._env.observation_spec()[0]))
 
   def single_player_action_space(self):
     """The action space for a single player in this environment."""
+    # import pdb; pdb.set_trace()
     return _spec_to_space(self._env.action_spec()[0])

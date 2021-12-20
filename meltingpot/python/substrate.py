@@ -34,6 +34,11 @@ class Substrate(base.Wrapper):
     """See base class."""
     return self._env.reward_spec()
 
+  #TODO
+  def hidden_reward_spec(self) -> Sequence[dm_env.specs.Array]:
+    """See base class."""
+    return self._env.hidden_reward_spec()
+
   def observation_spec(self) -> Sequence[Mapping[str, dm_env.specs.Array]]:
     """See base class."""
     return self._env.observation_spec()
@@ -43,7 +48,7 @@ class Substrate(base.Wrapper):
     return self._env.action_spec()
 
 
-def get_config(substrate_name: str) -> config_dict.ConfigDict:
+def get_config(substrate_name: str, num_players: int=16, map_size: str='large') -> config_dict.ConfigDict:
   """Returns the configs for the substrate.
 
   Args:
@@ -51,7 +56,7 @@ def get_config(substrate_name: str) -> config_dict.ConfigDict:
   """
   if substrate_name not in AVAILABLE_SUBSTRATES:
     raise ValueError(f'Unknown substrate {substrate_name!r}.')
-  return substrate_configs.get_config(substrate_name).lock()
+  return substrate_configs.get_config(substrate_name, num_players=num_players, map_size=map_size).lock()
 
 
 def build(config: config_dict.ConfigDict) -> Substrate:
