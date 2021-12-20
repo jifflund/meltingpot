@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="0a8fa573-bce5-4a67-b687-03b9289879f9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/rllib/replay_from_checkpoint_open_harvest.py" beforeDir="false" afterPath="$PROJECT_DIR$/examples/rllib/replay_from_checkpoint_open_harvest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/rllib/multiagent_wrapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/examples/rllib/multiagent_wrapper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/meltingpot/python/scenario.py" beforeDir="false" afterPath="$PROJECT_DIR$/meltingpot/python/scenario.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/meltingpot/python/utils/substrates/wrappers/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/meltingpot/python/utils/substrates/wrappers/base.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,11 +64,23 @@
       <workItem from="1629681284461" duration="2541000" />
       <workItem from="1629685804772" duration="5354000" />
       <workItem from="1630204866347" duration="19079000" />
-      <workItem from="1639945055113" duration="1128000" />
+      <workItem from="1639945055113" duration="20420000" />
+      <workItem from="1639977908509" duration="5338000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/meltingpot/python/utils/scenarios/wrappers/restricted_observations_wrapper_test.py</url>
+          <line>15</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

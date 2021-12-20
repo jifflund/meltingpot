@@ -87,14 +87,32 @@ class MeltingPotEnv(multi_agent_env.MultiAgentEnv):
   def __init__(self, env: dmlab2d.Environment):
     self._env = env
     self._num_players = len(self._env.observation_spec())
+    self.step_count = 0
+    self.cumulative_rewards = {}
 
   def reset(self):
     """See base class."""
     timestep = self._env.reset()
+    self.step_count = 0
     return _timestep_to_observations(timestep)
+
+
+  def calculate_inequality_penalty(self):
+    """Computes the positive reward inequalty penalty for a given timestep reward.
+       This is a proxy for (un)empowerment
+    """
+    # import pdb; pdb.set_trace()
+    timestep_reward = np.array(list(self.cumulative_rewards.values()))
+    # print('timestep_reward', timestep_reward)
+    timestep_reward[timestep_reward <= 0] = 0
+    mean_absolute_difference = np.abs(np.subtract.outer(timestep_reward, timestep_reward)).mean()
+    return -mean_absolute_difference
 
   def step(self, action, include_global_observation=False, include_hidden_rewards=False):
     """See base class."""
+    self.step_count += 1
+
+    # print('step_count',self.step_count)
     actions = [
         action[PLAYER_STR_FORMAT.format(index=index)]
         for index in range(self._num_players)
@@ -106,13 +124,47 @@ class MeltingPotEnv(multi_agent_env.MultiAgentEnv):
         PLAYER_STR_FORMAT.format(index=index): timestep.reward[index]
         for index in range(self._num_players)
     }
+    # for k, v in rewards.items():
+    #   rewardv = int(v)
+    #   if rewardv >0:
+    #     import pdb;
+    #     pdb.set_trace()
+    #     print(int(v))
+
+    # print('rewards', rewards)
+    # if self.cumulative_rewards is None:
+    #   self.cumulative_rewards = rewards
+    # else:
+    for key, value in rewards.items():
+      self.cumulative_rewards[key] = self.cumulative_rewards.get(key, 0) + int(value)
+
     hidden_rewards = {
       PLAYER_STR_FORMAT.format(index=index): timestep.hidden_reward[index]
       for index in range(self._num_players)
     }
 
+
     done = {'__all__': True if timestep.last() else False}
     info = {}
+
+    if timestep.last() or self.step_count == 200:
+      inequality_penalty = self.calculate_inequality_penalty()
+      # print('inequality_penalty!!!!', inequality_penalty)
+
+      overconsumption_threshold = 4
+      overconsumption_penalty = {}
+      for key, value in self.cumulative_rewards.items():
+        overconsumption_penalty[key] = -1.0 * max(
+          self.cumulative_rewards[key] - overconsumption_threshold, 0)
+
+      # print('overconsumption_penalty', overconsumption_penalty)
+
+      for key, value in hidden_rewards.items():
+        hidden_rewards[key] = (value \
+                               + np.array(inequality_penalty) \
+                               + np.array(overconsumption_penalty[key])).reshape(1)
+      # print('hidden_rewards', hidden_rewards)
+      # print('self.cumulative_rewards', self.cumulative_rewards)
 
     observations = _timestep_to_observations(timestep)
     # import pdb; pdb.set_trace()
