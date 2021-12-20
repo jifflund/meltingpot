@@ -53,34 +53,27 @@ def main():
     env = multiagent_wrapper.MeltingPotEnv(env, include_hidden_rewards=include_hidden_rewards)
     return env
 
-  # We need the following pieces to run the training:
-  # 1. The agent algorithm to use.
   agent_algorithm = args.agent_algorithm
-  # 2. The name of the MeltingPot substrate, coming
-  # from substrate.AVAILABLE_SUBSTRATES.
-  # substrate_name = "allelopathic_harvest"
-  substrate_name = "commons_harvest_open"
+  substrate_name = "commons_harvest_open" # TODO see from substrate.AVAILABLE_SUBSTRATES.
 
-  # 3. The number of CPUs to be used to run the training.
+  # The number of CPUs to be used to run the training.
   num_cpus = 6
 
-  # 4. Gets default training configuration and specifies the POMgame to load.
+  # Gets default training configuration and specifies the POMgame to load.
   config = copy.deepcopy(
       get_trainer_class(agent_algorithm)._default_config)  # pylint: disable=protected-access
 
-  # 5. Set environment config. This will be passed to
-  # the env_creator function via the register env lambda below.
+  # Set environment config. This will be passed to the env_creator function via the register env lambda below.
   config["env_config"] = substrate.get_config(substrate_name, num_players=args.num_players, map_size=args.map_size)
 
-  # 6. Register env
   register_env("meltingpot", env_creator)
 
-  # 7. Extract space dimensions
+  # Extract space dimensions
   test_env = env_creator(config["env_config"])
   obs_space = test_env.single_player_observation_space()
   act_space = test_env.single_player_action_space()
 
-  # 8. Configuration for multiagent setup with policy sharing:
+  # Configuration for multiagent setup with policy sharing:
   config["multiagent"] = {
       "policies": {
           # the first tuple value is None -> uses default policy
@@ -107,30 +100,19 @@ def main():
   # when dones[__all__]= True.
   config['env'] = 'meltingpot'
 
-  # 9. Initialize ray and trainer object
+  # Initialize ray and trainer object
   ray.init(num_cpus=num_cpus + 1)
-
-  # 10. Set stopper function
-  # This will run fairly quickly when 3 agents
-  # def stopper(trial_id, result):
-  #   return result["episode_reward_mean"] > 24
-
-  # Use this to train forever
-  def stopper(trial_id, result):
-    return False
-
 
   checkpoint_path = args.checkpoint_path
 
   analysis = tune.run(
     args.agent_algorithm,
     name=f'meltingpot_open_harvest_{args.agent_algorithm.lower()}_hidden_reward_{args.include_hidden_rewards}_type_{args.map_size}',
-    stop={"training_iteration": args.num_training_iteration},     # stop=stopper,
+    stop={"training_iteration": args.num_training_iteration},
     verbose=3,
     checkpoint_at_end=True,
     keep_checkpoints_num=100,
     # TODO May use this for further analysis on how it learns, but for now use just most recent N using keep_checkpoints param
-    # checkpoint_score_attr='min-validation_loss',
     checkpoint_freq=1,
     config=config,
     restore=checkpoint_path

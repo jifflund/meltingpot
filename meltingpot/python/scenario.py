@@ -51,8 +51,6 @@ def _step_fn(policy: bot_factory.Policy) -> Callable[[dm_env.TimeStep], int]:
 
   def step(timestep: dm_env.TimeStep) -> int:
     nonlocal state
-    # import ipdb;
-    # ipdb.set_trace()
     action, state = policy.step(timestep=timestep, prev_state=state)
     return action
 
@@ -95,8 +93,6 @@ class Scenario(base.Wrapper):
     sampled_names = random.choices(tuple(self._bots), k=self._num_bots)
     logging.info('Resampled bots: {sampled_bot_names}')
 
-    # import ipdb; ipdb.set_trace()
-
     self._bot_step_fns = [_step_fn(self._bots[name]) for name in sampled_names]
     for future in self._action_futures:
       future.cancel()
@@ -106,8 +102,6 @@ class Scenario(base.Wrapper):
     """Sends timesteps to bots for asynchronous processing."""
     assert not self._action_futures
     for bot_step, timestep in zip(self._bot_step_fns, timesteps):
-      # import ipdb;
-      # ipdb.set_trace()
       future = self._executor.submit(bot_step, timestep=timestep)
       self._action_futures.append(future)
 
@@ -145,7 +139,6 @@ class Scenario(base.Wrapper):
     """See base class."""
     agent_actions = action
     bot_actions = self._await_actions()
-    # import ipdb; ipdb.set_trace()
     timestep = super().step(list(agent_actions) + list(bot_actions))
     agent_timestep, bot_timesteps = self._split_timestep(timestep)
     self._send_timesteps(bot_timesteps)

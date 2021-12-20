@@ -109,7 +109,6 @@ class Wrapper(base.Wrapper):
     for suffix in self._individual_observation_suffixes:
       for i, value in _player_observations(source, suffix, self._num_players):
         player_observations[i][suffix] = value
-    # print('source', source )
     for name in self._global_observation_names:
       value = source[name]
       for i in range(self._num_players):
@@ -137,7 +136,6 @@ class Wrapper(base.Wrapper):
     rewards = [None] * self._num_players
     for i, value in _player_observations(source, "HIDDEN_REWARD", self._num_players):
       rewards[i] = value
-    # print('hidden_rewards', rewards)
     return rewards
 
   def _get_timestep(self, source: TimeStepWrapper) -> TimeStepWrapper:
@@ -146,7 +144,6 @@ class Wrapper(base.Wrapper):
     Args:
       source: dmlab2d observations source to check.
     """
-    # print('self._get_rewards(source.observation)', self._get_rewards(source.observation))
     return TimeStepWrapper(
         step_type=source.step_type,
         reward=self._get_rewards(source.observation),
@@ -191,7 +188,6 @@ class Wrapper(base.Wrapper):
 
   def observation_spec(self) -> Sequence[Mapping[str, dm_env.specs.Array]]:
     """See base class."""
-    # print('multiplayer_wrapper', super().observation_spec())
     source = super().observation_spec()
     return self._get_observations(source)
 

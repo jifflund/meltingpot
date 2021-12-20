@@ -254,7 +254,6 @@ function Avatar:addObservations(tileSet, world, observations)
       shape = playerLayerView:gridSize(),
       set = tileSet
   }
--- [[TODO  maybe add in additional reward here- but don't see it in the UI that I'm using.  how to add to return as part of obs]]
 
   local spec = {
       name = stringId .. '.RGB',
@@ -269,19 +268,6 @@ function Avatar:addObservations(tileSet, world, observations)
       end
   }
   observations[#observations + 1] = spec
---   local spec = {
---       name = stringId .. '.RGB123',
---       type = 'tensor.ByteTensor',
---       shape = playerView:shape(),
---       func = function(grid)
---         local layer_observation = playerLayerView:observation{
---             grid = grid,
---             piece = self.gameObject:getPiece(),
---         }
---         return playerView:render(layer_observation)
---       end
---   }
---   observations[#observations + 1] = spec
 end
 
 function Avatar:reset()

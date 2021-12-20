@@ -41,7 +41,6 @@ class Wrapper(dmlab2d.Environment):
 
   def step(self, *args, **kwargs):
     """See base class."""
-    # import pdb; pdb.set_trace()
     return self._env.step(*args, **kwargs)
 
   def reward_spec(self, *args, **kwargs):
@@ -54,9 +53,6 @@ class Wrapper(dmlab2d.Environment):
 
   def observation_spec(self, *args, **kwargs):
     """See base class."""
-    # print('base wrapper', self._env.observation_spec(*args, **kwargs))
-    # print('args', args)
-    # print('kwargs', kwargs)
     return self._env.observation_spec(*args, **kwargs)
 
   def action_spec(self, *args, **kwargs):

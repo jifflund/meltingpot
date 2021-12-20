@@ -21,18 +21,15 @@ To run the code
 
     ```shell
     cd examples/rllib/
-    python self_play_train_open_harvest2.py  --num_players 3 --map_size small
+    python self_play_train_open_harvest.py --agent_algorithm='PPO' --include_hidden_rewards='True'
     ```
-
 
 ## Testing
 
-To test the code
-python replay_from_checkpoint_open_harvest2.py --num_players 3 --map_size small --checkpoint_path /Users/allisterlundberg/ray_results/trainer_meltingpot_v1/PPO_meltingpot_c20ae_00000_0_2021-09-12_14-02-37/checkpoint_000010/checkpoint-10 --render_env True --num_replays 30
+To be documented
 
-## Generating Reports
+## Generating Reports using Tensorboard
 
-Ability to save run and compare to other runs.
-Do this by hand and looking at tensorboard
+To be documented
  
  
